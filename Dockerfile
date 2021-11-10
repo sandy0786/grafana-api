@@ -1,25 +1,22 @@
 FROM golang:1.16-alpine
 
 # working directory
-WORKDIR /app/
+WORKDIR /app/grafana-api
 
 # Download necessary Go modules
-COPY go.mod ./
-COPY go.sum ./
+COPY go.mod .
+COPY go.sum .
+
+# Download dependencies
 RUN go mod download
 
+# copy all go files
 COPY . .
-#Install git
-# RUN apt-get update \        
-#      apt-get install -y git
 
-# RUN git clone https://github.com/sandy0786/grafana-api.git
+# build the application
+RUN go build -o ./out/grafana-api ./cmd
 
-RUN go mod download
-
-# RUN go build ./
-
+# Expose port
 EXPOSE 8080
 
-# CMD [ "./cmd" ]
-CMD [ "./go run cmd/main.go" ]
+CMD [ "./out/grafana-api" ]
