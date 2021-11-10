@@ -20,17 +20,13 @@ func GetData(queryParams url.Values) []map[string]interface{} {
 	filter := queryParams["filter"][0]
 	var start int64
 	start, err := strconv.ParseInt(queryParams["start"][0], 10, 0)
-
 	if err != nil {
 		log.Println("error >> ", err)
 	}
 
 	var end int64
 	end, err = strconv.ParseInt(queryParams["end"][0], 10, 0)
-	log.Println("end : ", end)
 
-	// log.Println("columns : ", columns)
-	// log.Println("filter : ", filter)
 	var filterKey string
 	var filterVal string
 
@@ -41,7 +37,6 @@ func GetData(queryParams url.Values) []map[string]interface{} {
 
 		re, _ = regexp.Compile(constants.FILTER_REGEX2)
 		match = re.FindStringSubmatch(filter)
-		// log.Println("match : ", match)
 		filterKey = match[1]
 		filterVal = match[2]
 	}
@@ -55,27 +50,19 @@ func GetData(queryParams url.Values) []map[string]interface{} {
 			resp := make(map[string]interface{})
 			splits := strings.Split(columns, ",")
 			for _, col := range splits {
-
 				if len(filterKey) > 0 {
-
 					if filterKey == col {
 						if strings.Contains(fmt.Sprintf("%v", dMap[col]), filterVal) {
-							// log.Println("if if if")
 							resp[col] = dMap[col]
 						}
 					} else {
-						// log.Println("if else")
 						resp[col] = dMap[col]
 					}
-
-					// break
 				} else {
-					// log.Println("else")
 					resp[col] = dMap[col]
 				}
 
 			}
-			// log.Println(resp[filterKey])
 			if resp[filterKey] != nil {
 				response = append(response, resp)
 			}

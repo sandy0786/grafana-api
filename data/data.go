@@ -1,7 +1,6 @@
 package data
 
 import (
-	"log"
 	"math/rand"
 	"strconv"
 	"time"
@@ -17,7 +16,7 @@ type DataBase struct {
 var Data []DataBase
 
 func SetData() {
-	log.Println("inside SetData")
+	// log.Println("inside SetData")
 
 	// loop through data and set sample data
 	totalRange := 360 // minutes
@@ -34,7 +33,7 @@ func SetData() {
 }
 
 func getDates(totalRange int64) (dateTime []int64) {
-	log.Println("inside getDates")
+	// log.Println("inside getDates")
 	now := time.Now().UTC()
 	startTime := now.Add(time.Duration(-6) * time.Hour)
 
