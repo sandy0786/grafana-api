@@ -25,16 +25,6 @@ func ValidateRequest(queryParams url.Values) (bool, errors.ApiError) {
 	}
 
 	// validate queryarams
-	// for _, qp := range constants.ALLOWED_QUERYPARAMS {
-	// 	_, found := queryParams[qp]
-	// 	if !found {
-	// 		return false, errors.ApiError{
-	// 			Message: errors.ErrorMap["InvalidQueryParam"] + qp,
-	// 		}
-	// 	}
-	// }
-
-	// validate queryarams
 	for key, _ := range queryParams {
 		if !utils.FindItemInList(constants.ALLOWED_QUERYPARAMS, key) {
 			return false, errors.ApiError{
