@@ -1,0 +1,301 @@
+{
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "title": "Grafana-api:",
+    "version": "0.0.1"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+    "/": {
+      "get": {
+        "description": "Get Status of the api",
+        "tags": [
+          "users"
+        ],
+        "operationId": "APIStatus",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/APIStatus"
+          }
+        }
+      }
+    },
+    "/aggregations": {
+      "get": {
+        "description": "Get Aggregate functions list",
+        "tags": [
+          "users"
+        ],
+        "operationId": "listAggregateFuncions",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/AggregationList"
+          },
+          "500": {
+            "$ref": "#/responses/CommonError"
+          }
+        }
+      }
+    },
+    "/data": {
+      "get": {
+        "description": "Get complete data",
+        "tags": [
+          "users"
+        ],
+        "operationId": "listCompleteData",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/DataList"
+          }
+        }
+      }
+    },
+    "/filters": {
+      "get": {
+        "description": "Get filter column list",
+        "tags": [
+          "users"
+        ],
+        "operationId": "listFilterColumns",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/FiltersList"
+          },
+          "500": {
+            "$ref": "#/responses/CommonError"
+          }
+        }
+      }
+    },
+    "/query": {
+      "get": {
+        "description": "Get graphable data by applying filters",
+        "tags": [
+          "users"
+        ],
+        "operationId": "listDataByFilters",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "start time in epoch milliseconds",
+            "name": "start",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "description": "end time in epoch milliseconds",
+            "name": "end",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "comma separated column names",
+            "name": "columns",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "filter in {columnName=value} format. default filter is contains",
+            "name": "filter",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/DataList"
+          },
+          "400": {
+            "$ref": "#/responses/ValidationError"
+          },
+          "500": {
+            "$ref": "#/responses/CommonError"
+          }
+        }
+      }
+    },
+    "/suggest": {
+      "get": {
+        "description": "Get distinct column values",
+        "tags": [
+          "users"
+        ],
+        "operationId": "listDistinctValues",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/SuggestList"
+          },
+          "500": {
+            "$ref": "#/responses/CommonError"
+          }
+        }
+      }
+    },
+    "/tagnames": {
+      "get": {
+        "description": "Get column names list",
+        "tags": [
+          "users"
+        ],
+        "operationId": "listColumnNames",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/GetColumnsList"
+          },
+          "500": {
+            "$ref": "#/responses/CommonError"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "APIStatus": {
+      "description": "HTTP status code 200 and message",
+      "headers": {
+        "message": {
+          "type": "string",
+          "description": "Message whether working or not - Datasource is working\nout: string"
+        },
+        "status": {
+          "type": "string",
+          "description": "HTTP status code 200 - Status OK\nout: string"
+        }
+      }
+    },
+    "AggregationList": {
+      "description": "List of aggregate functions",
+      "headers": {
+        "aggregate": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of aggregate functions\nout: []string"
+        }
+      }
+    },
+    "CommonError": {
+      "description": "Common error",
+      "headers": {
+        "message": {
+          "type": "string",
+          "description": "out:string\nDetailed error message"
+        }
+      }
+    },
+    "DataList": {
+      "description": "List of rows",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "hostname": {
+            "description": "hostname",
+            "type": "string",
+            "x-go-name": "Hostname"
+          },
+          "metric": {
+            "description": "metric",
+            "type": "string",
+            "x-go-name": "Metric"
+          },
+          "time": {
+            "description": "time in epoch milliseconds",
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "Time"
+          },
+          "value": {
+            "description": "value",
+            "type": "number",
+            "format": "double",
+            "x-go-name": "Value"
+          }
+        }
+      },
+      "headers": {
+        "Body": {
+          "description": "list of column values\nout:body"
+        }
+      }
+    },
+    "DataList2": {
+      "description": "List of rows",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "hostname": {
+            "description": "hostname",
+            "type": "string",
+            "x-go-name": "Hostname"
+          },
+          "metric": {
+            "description": "metric",
+            "type": "string",
+            "x-go-name": "Metric"
+          },
+          "time": {
+            "description": "time in epoch milliseconds",
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "Time"
+          },
+          "value": {
+            "description": "value",
+            "type": "number",
+            "format": "double",
+            "x-go-name": "Value"
+          }
+        }
+      },
+      "headers": {
+        "Body": {
+          "description": "list of column values\nout:body"
+        }
+      }
+    },
+    "FiltersList": {
+      "description": "List of filters",
+      "headers": {
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of aggregate functions\nout: []string"
+        }
+      }
+    },
+    "SuggestList": {
+      "description": "List of distinct column values",
+      "headers": {
+        "suggest": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "list of column values\nout: []string"
+        }
+      }
+    },
+    "ValidationError": {
+      "description": "Validation error",
+      "headers": {
+        "message": {
+          "type": "string",
+          "description": "out:string\nDetailed validation error message"
+        }
+      }
+    }
+  }
+}

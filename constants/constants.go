@@ -10,12 +10,17 @@ const (
 const (
 	STATUS_PATH       = "/"
 	SUGGEST_PATH      = "/suggest"
+	TAGNAMES_PATH     = "/tagnames"
+	FILTERS_PATH      = "/filters"
 	AGGREGATIONS_PATH = "/aggregations"
 	QUERY_PATH        = "/query"
+	DATA_PATH         = "/data"
+	DOC_PATH          = "/docs"
 )
 
 var SUGGEST_CONSTANTS = []string{TIME, METRIC, HOSTNAME, VALUE}
 var AGGREGATE_FUNCTIONS = []string{"avg", "sum"}
+var FILTER_CONSTANTS = []string{METRIC, HOSTNAME}
 
 const FILTER_REGEX1 = "^{([a-z0-9A-Z,=]+)}$"
 const FILTER_REGEX2 = "^{([a-z]+)=([a-z0-9]+)}$"

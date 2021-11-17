@@ -1,6 +1,18 @@
 package errors
 
+// Common error
+// swagger:response CommonError
 type ApiError struct {
+	// out:string
+	// Detailed error message
+	Message string `json:"message"`
+}
+
+// Validation error
+// swagger:response ValidationError
+type ValidationError struct {
+	// out:string
+	// Detailed validation error message
 	Message string `json:"message"`
 }
 

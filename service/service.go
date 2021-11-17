@@ -17,7 +17,11 @@ func GetData(queryParams url.Values) []map[string]interface{} {
 	log.Println("inside getData ")
 	var response []map[string]interface{}
 	columns := queryParams["columns"][0]
-	filter := queryParams["filter"][0]
+	var filter string
+	if queryParams["filter"] != nil {
+		filter = queryParams["filter"][0]
+	}
+
 	var start int64
 	start, err := strconv.ParseInt(queryParams["start"][0], 10, 0)
 	if err != nil {
@@ -30,6 +34,10 @@ func GetData(queryParams url.Values) []map[string]interface{} {
 	var filterKey string
 	var filterVal string
 
+	var dataMap []map[string]interface{}
+	inrec, _ := json.Marshal(data.Data)
+	json.Unmarshal(inrec, &dataMap)
+
 	// extract filters
 	if len(filter) > 0 {
 		re, _ := regexp.Compile(constants.FILTER_REGEX1)
@@ -41,35 +49,24 @@ func GetData(queryParams url.Values) []map[string]interface{} {
 		filterVal = match[2]
 	}
 
-	var dataMap []map[string]interface{}
-	inrec, _ := json.Marshal(data.Data)
-	json.Unmarshal(inrec, &dataMap)
-
 	for _, dMap := range dataMap {
-		if dMap[constants.TIME].(float64) > float64(start) && dMap[constants.TIME].(float64) < float64(end) {
+		if dMap[constants.TIME].(float64) > float64(start) && float64(end) < dMap[constants.TIME].(float64) {
 			resp := make(map[string]interface{})
 			splits := strings.Split(columns, ",")
-			for _, col := range splits {
-				if len(filterKey) > 0 {
-					if filterKey == col {
-						if strings.Contains(fmt.Sprintf("%v", dMap[col]), filterVal) {
-							resp[col] = dMap[col]
-						}
-					} else {
+			if len(filterKey) > 0 {
+				if strings.Contains(fmt.Sprintf("%v", dMap[filterKey]), filterVal) {
+					for _, col := range splits {
 						resp[col] = dMap[col]
 					}
-				} else {
+					response = append(response, resp)
+				}
+			} else {
+				for _, col := range splits {
 					resp[col] = dMap[col]
 				}
-
-			}
-			if resp[filterKey] != nil {
 				response = append(response, resp)
 			}
-		} else {
-			// log.Println("time else >>")
 		}
-
 	}
 	return response
 }
